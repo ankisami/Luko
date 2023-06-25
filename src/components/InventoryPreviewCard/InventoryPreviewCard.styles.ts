@@ -35,4 +35,9 @@ export const styles = StyleSheet.create({
     fontSize: 19,
     lineHeight: 26,
   },
+  price: {
+    color: colors.grey,
+  },
 });
+
+export default styles;

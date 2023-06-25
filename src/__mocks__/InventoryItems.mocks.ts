@@ -19,8 +19,8 @@ export const InventoryItemsMocked: InventoryItem[] = [
   // Add more items here...
   {
     id: 3,
-    name: "Item 3",
-    purchasePrice: 100,
+    name: "Lou.Yetu necklace",
+    purchasePrice: 60,
     type: "OTHER",
     photo: "https://example.com/item3.jpg",
   },
