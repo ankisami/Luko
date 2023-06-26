@@ -120,6 +120,7 @@ export default function AddItemScreen({
         contentContainerStyle={styles.formContainer}
         extraScrollHeight={100}
         extraHeight={50}
+        showsVerticalScrollIndicator={false}
       >
         <Controller
           name="photo"

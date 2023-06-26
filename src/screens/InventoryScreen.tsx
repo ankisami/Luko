@@ -1,17 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  Alert,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { InventoryPreviewCard, Title } from "components";
 import Colors from "theme/colors";
 import { RootTabScreenProps } from "navigation/types";
 import { InventoryItem } from "models/Inventory.d";
-import { InventoryItemsMocked } from "mocks/InventoryItems.mocks";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getInventoryItems } from "api/InventoryApi";
+import { sortItemsByName } from "utils/sortFunction";
 
 export default function InventoryScreen({
   navigation,
@@ -19,36 +13,11 @@ export default function InventoryScreen({
 }: RootTabScreenProps<"Inventory">) {
   const [items, setItems] = useState<InventoryItem[]>([]);
 
-  const handleAddButtonPress = () => navigation.navigate("AddItem");
-
-  const initMockedData = async () => {
-    try {
-      const sortedItems = InventoryItemsMocked.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-      await AsyncStorage.setItem(
-        "@inventoryItemStorage",
-        JSON.stringify(sortedItems)
-      );
-      setItems(sortedItems);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const getData = useCallback(async () => {
     try {
-      const inventoryItemStorage = await AsyncStorage.getItem(
-        "@inventoryItemStorage"
-      );
-      inventoryItemStorage === null
-        ? initMockedData()
-        : setItems(
-            JSON.parse(inventoryItemStorage).sort(
-              (a: InventoryItem, b: InventoryItem) =>
-                a.name.localeCompare(b.name)
-            )
-          );
+      const inventoryItemStorage = await getInventoryItems();
+      const itemsSorted = sortItemsByName(inventoryItemStorage);
+      setItems(itemsSorted);
     } catch (e) {
       console.error(e);
     }
@@ -64,7 +33,7 @@ export default function InventoryScreen({
     return focusHandler;
   }, [navigation, getData]);
 
-  console.log("Iventory screen items", items);
+  const handleAddButtonPress = () => navigation.navigate("AddItem");
   return (
     <View style={styles.container}>
       <Title onButtonPress={handleAddButtonPress}>{route.name}</Title>
@@ -72,6 +41,7 @@ export default function InventoryScreen({
         contentContainerStyle={styles.InventoryPreviewCardList}
         numColumns={2}
         data={items}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <TouchableOpacity
             key={item.id}

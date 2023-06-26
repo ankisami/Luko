@@ -10,7 +10,9 @@
       "screens/*": ["src/screens/*"],
       "navigation/*": ["src/navigation/*"],
       "models/*": ["src/models/*"],
-      "assets/*": ["src/assets/*"]
+      "assets/*": ["src/assets/*"],
+      "api/*": ["src/api/*"],
+      "utils/*": ["src/utils/*"]
     }
   }
 }

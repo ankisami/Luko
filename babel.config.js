@@ -19,6 +19,7 @@ module.exports = function (api) {
             "ios.tsx",
           ],
           alias: {
+            api: "./src/api",
             theme: "./src/theme",
             components: "./src/components",
             screens: "./src/screens",
@@ -26,6 +27,7 @@ module.exports = function (api) {
             models: "./src/models",
             mocks: "./src/__mocks__",
             assets: "./src/assets",
+            utils: "./src/utils",
           },
         },
       ],
