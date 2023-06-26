@@ -12,19 +12,15 @@ import styles from "./FormTextInput.styles";
 type Props = {
   label?: string;
   type?: "text" | "price";
-  placeholder?: string;
-  value?: string;
   containerStyle?: StyleProp<ViewStyle>;
-  onChangeText?: (value: string) => void;
+  errorMessage?: string;
 } & TextInputProps;
 
 const FormTextInput = ({
   label,
   type = "text",
-  placeholder,
-  value,
-  onChangeText: handleChangeText,
   containerStyle,
+  errorMessage,
   ...props
 }: Props) => {
   return (
@@ -32,15 +28,14 @@ const FormTextInput = ({
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={[styles.textInputContainer, containerStyle]}>
         <TextInput
-          value={value}
           style={styles.input}
           keyboardType={type === "price" ? "numeric" : "default"}
-          placeholder={placeholder}
           numberOfLines={1}
           {...props}
         />
         {type === "price" && <Text style={styles.currency}>€</Text>}
       </View>
+      {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
     </View>
   );
 };

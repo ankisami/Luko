@@ -36,6 +36,12 @@ export const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.grey,
   },
+  errorMessage: {
+    fontSize: 12,
+    fontWeight: "400",
+    lineHeight: 17,
+    color: colors.error,
+  },
 });
 
 export default styles;

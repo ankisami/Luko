@@ -1,23 +1,22 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { styles } from "./InventoryPreviewCard.styles";
+import { InventoryItem } from "models/Inventory.d";
 
 type Props = {
-  title: string;
-  photo: string;
-  price: number;
+  item: InventoryItem;
 };
 
-const InventoryPreviewCard = ({ title, photo, price }: Props) => {
-  const formattedPrice = new Intl.NumberFormat().format(price);
+const InventoryPreviewCard = ({ item }: Props) => {
+  const formattedPrice = new Intl.NumberFormat().format(item.purchasePrice);
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: photo }} style={styles.image} />
+      <Image source={{ uri: item.photo }} style={styles.image} />
 
       <View style={styles.textInfos}>
         <Text style={styles.title} numberOfLines={2}>
-          {title}
+          {item.name}
         </Text>
         <Text style={styles.price}>€ {formattedPrice ?? "0"}</Text>
       </View>

@@ -1,43 +1,119 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button, FormTextInput, PictureSelector } from "components";
 import { RootTabScreenProps } from "navigation/types";
 import { colors } from "theme/colors";
 import { useForm, Controller, SubmitErrorHandler } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { getStatusBarHeight } from "../../node_modules/react-native-iphone-x-helper/index";
-
-type FormValues = {
-  picture: string;
-  name: string;
-  value: string;
-  description?: string;
-};
+import { InventoryItem } from "models/Inventory.d";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
 
 export default function AddItemScreen({
   navigation,
+  route,
 }: RootTabScreenProps<"AddItemScreen">) {
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>();
   const {
-    register,
-    setValue,
     handleSubmit,
     control,
-    reset,
-    formState: { errors },
-  } = useForm();
+    watch,
+    setError,
+    clearErrors,
+    formState: { errors, isValid },
+  } = useForm<InventoryItem>({
+    defaultValues: {
+      id: route.params?.item?.id || (uuid.v4() as string),
+      name: route.params?.item?.name,
+      purchasePrice: route.params?.item?.purchasePrice,
+      type: route.params?.item?.type,
+      description: route.params?.item?.description,
+      photo: route.params?.item?.photo,
+    },
+  });
 
-  const onError: SubmitErrorHandler<FormValues> = (errors, e) => {
-    return console.log(errors);
+  const getData = async () => {
+    try {
+      const storage = await AsyncStorage.getItem("@inventoryItemStorage");
+      storage === null
+        ? setInventoryItems([])
+        : setInventoryItems(JSON.parse(storage));
+    } catch (e) {
+      console.error(e);
+    }
   };
-  const onSubmit = handleSubmit((data) => console.log(data));
+
+  const isTotalPurchasePriceValid = (): boolean => {
+    const inventoryItemList = inventoryItems || [];
+    const updatedInventory = inventoryItemList.filter(
+      (item) => item.id !== watch("id")
+    );
+    const totalPurchasePrice =
+      updatedInventory.reduce((sum, item) => sum + item.purchasePrice, 0) +
+      watch("purchasePrice");
+    if (totalPurchasePrice > 40000) {
+      setError(
+        "purchasePrice",
+        {
+          type: "focus",
+          message: `The total value of your items may not exceed 40,000 euros. You may add a further ${
+            totalPurchasePrice - watch("purchasePrice")
+          } euros maximum`,
+        },
+        { shouldFocus: true }
+      );
+    }
+    return totalPurchasePrice <= 40000;
+  };
+
+  const isValidForm = (): boolean => {
+    if (JSON.stringify(watch()) === JSON.stringify(route.params?.item))
+      return false;
+    if (watch("name") === undefined) return false;
+    if (watch("purchasePrice") === undefined) return false;
+    if (watch("photo") === undefined) return false;
+    if (!isTotalPurchasePriceValid()) return false;
+
+    return true;
+  };
+
+  const onSubmit = async (data: InventoryItem) => {
+    try {
+      const inventoryItemList = inventoryItems || [];
+      const updatedInventory = inventoryItemList.filter(
+        (item) => item.id !== watch("id")
+      );
+      updatedInventory.push(data);
+
+      await AsyncStorage.setItem(
+        "@inventoryItemStorage",
+        JSON.stringify(updatedInventory)
+      );
+      navigation.navigate("Inventory");
+    } catch (error) {}
+  };
 
   const handleChangePicture = () => {
     console.log("Press picture");
   };
+
+  const handleDeletePicture = () => {
+    console.log("Delete picture");
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonsContainer}>
         <Button title="Cancel" onPress={() => navigation.goBack()} />
-        <Button title="Add" disabled onPress={() => undefined} />
+        <Button
+          title="Add"
+          disabled={!isValid || !isValidForm()}
+          onPress={handleSubmit(onSubmit)}
+        />
       </View>
 
       <KeyboardAwareScrollView
@@ -45,7 +121,19 @@ export default function AddItemScreen({
         extraScrollHeight={100}
         extraHeight={50}
       >
-        <PictureSelector onChangePicture={handleChangePicture} />
+        <Controller
+          name="photo"
+          control={control}
+          rules={{ required: true }}
+          render={({ field: { value } }) => (
+            <PictureSelector
+              picture={value}
+              onChangePicture={handleChangePicture}
+              onDeletePicture={handleDeletePicture}
+            />
+          )}
+        />
+
         <Controller
           name="name"
           rules={{ required: true }}
@@ -63,7 +151,7 @@ export default function AddItemScreen({
         />
 
         <Controller
-          name="value"
+          name="purchasePrice"
           rules={{ required: true }}
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -72,15 +160,15 @@ export default function AddItemScreen({
               type="price"
               placeholder="700"
               onBlur={onBlur}
-              onChangeText={(value) => onChange(value)}
-              value={value}
+              onChangeText={(value) => onChange(Number(value))}
+              value={value?.toString()}
+              errorMessage={errors.purchasePrice?.message}
             />
           )}
         />
 
         <Controller
           name="description"
-          rules={{ required: true }}
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <FormTextInput

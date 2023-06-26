@@ -9,6 +9,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { InventoryItem } from "models/Inventory";
 
 declare global {
   namespace ReactNavigation {
@@ -17,7 +18,7 @@ declare global {
 }
 
 export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | {title:string};
+  Root: NavigatorScreenParams<RootTabParamList> | { title: string };
   AddItem: undefined;
   NotFound: undefined;
 };
@@ -31,7 +32,7 @@ export type RootTabParamList = {
   Insurance: undefined;
   Realty: undefined;
   Menu: undefined;
-  AddItemScreen: undefined
+  AddItemScreen: { item: InventoryItem } | undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
@@ -40,13 +41,19 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     NativeStackScreenProps<RootStackParamList>
   >;
 
-export type InventoryItem = {
-  id?: string;
-  name: string;
-  value: string | number;
-  type?: string;
-  description?: string;
-  photo?: string;
-};
+/* 
+    I created my own type to adhere to the requested structure outlined in 
+    the technical test sent via email.
+    My types are in the file src/models/Inventory.d.ts
+*/
 
-export type Items = InventoryItem[];
+// export type InventoryItem = {
+//   id?: string;
+//   name: string;
+//   value: string | number;
+//   type?: string;
+//   description?: string;
+//   photo?: string;
+// };
+
+// export type Items = InventoryItem[];
