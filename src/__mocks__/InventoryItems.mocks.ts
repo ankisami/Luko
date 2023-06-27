@@ -16,29 +16,27 @@ export const InventoryItemsMocked: InventoryItem[] = [
     type: "MUSIC_INSTRUMENT",
     photo: "https://i.ibb.co/4dfndL2/louis-hansel-M-d-J-Scwa-LE-unsplash.jpg",
   },
-  // Add more items here...
   {
     id: 3,
     name: "Lou.Yetu necklace",
     purchasePrice: 60,
     type: "OTHER",
-    photo: "https://example.com/item3.jpg",
+    photo: "https://i.ibb.co/znXC7LQ/marcus-lewis-U63z-XX2f7ho-unsplash.jpg",
   },
   {
     id: 4,
     name: "Item 4",
     purchasePrice: 200,
     type: "OTHER",
-    photo: "https://example.com/item4.jpg",
+    photo: "https://i.ibb.co/znXC7LQ/marcus-lewis-U63z-XX2f7ho-unsplash.jpg",
   },
   {
     id: 5,
     name: "Item 5",
     purchasePrice: 300,
     type: "OTHER",
-    photo: "https://example.com/item5.jpg",
+    photo: "https://i.ibb.co/znXC7LQ/marcus-lewis-U63z-XX2f7ho-unsplash.jpg",
   },
-  // Add more items as needed...
 ];
 
 // Add 10 more items

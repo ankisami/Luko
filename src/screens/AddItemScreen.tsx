@@ -1,29 +1,31 @@
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, FormTextInput, PictureSelector } from "components";
 import { RootTabScreenProps } from "navigation/types";
 import { colors } from "theme/colors";
-import { useForm, Controller, SubmitErrorHandler } from "react-hook-form";
+import { useForm, Controller, SubmitErrorHandler, set } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { InventoryItem } from "models/Inventory.d";
-import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import uuid from "react-native-uuid";
+import { putInventoryItems } from "api/InventoryApi";
 
 export default function AddItemScreen({
   navigation,
   route,
 }: RootTabScreenProps<"AddItemScreen">) {
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>();
+
   const {
     handleSubmit,
     control,
     watch,
     setError,
-    clearErrors,
+    getValues,
     formState: { errors, isValid },
   } = useForm<InventoryItem>({
     defaultValues: {
-      id: route.params?.item?.id || (uuid.v4() as string),
+      id: route.params?.item?.id ?? (uuid.v4() as string),
       name: route.params?.item?.name,
       purchasePrice: route.params?.item?.purchasePrice,
       type: route.params?.item?.type,
@@ -66,16 +68,16 @@ export default function AddItemScreen({
     return totalPurchasePrice <= 40000;
   };
 
-  const isValidForm = (): boolean => {
+  const isValidForm = useCallback((): boolean => {
     if (JSON.stringify(watch()) === JSON.stringify(route.params?.item))
       return false;
-    if (watch("name") === undefined) return false;
-    if (watch("purchasePrice") === undefined) return false;
-    if (watch("photo") === undefined) return false;
+    if (!watch("name")) return false;
+    if (!watch("purchasePrice")) return false;
+    if (!watch("photo")) return false;
     if (!isTotalPurchasePriceValid()) return false;
 
     return true;
-  };
+  }, [getValues, route.params?.item, isTotalPurchasePriceValid]);
 
   const onSubmit = async (data: InventoryItem) => {
     try {
@@ -85,25 +87,14 @@ export default function AddItemScreen({
       );
       updatedInventory.push(data);
 
-      await AsyncStorage.setItem(
-        "@inventoryItemStorage",
-        JSON.stringify(updatedInventory)
-      );
+      await putInventoryItems(updatedInventory);
       navigation.navigate("Inventory");
     } catch (error) {}
   };
 
-  const handleChangePicture = () => {
-    console.log("Press picture");
-  };
-
-  const handleDeletePicture = () => {
-    console.log("Delete picture");
-  };
-
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
 
   return (
     <View style={styles.container}>
@@ -125,19 +116,16 @@ export default function AddItemScreen({
         <Controller
           name="photo"
           control={control}
-          rules={{ required: true }}
-          render={({ field: { value } }) => (
+          render={({ field: { value, onChange } }) => (
             <PictureSelector
               picture={value}
-              onChangePicture={handleChangePicture}
-              onDeletePicture={handleDeletePicture}
+              onChangePicture={(value) => onChange(value)}
             />
           )}
         />
 
         <Controller
           name="name"
-          rules={{ required: true }}
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <FormTextInput

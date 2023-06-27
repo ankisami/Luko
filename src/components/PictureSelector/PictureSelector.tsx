@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./PictureSelector.styles";
 import {
   TouchableOpacity,
@@ -10,42 +10,56 @@ import {
 import { Entypo } from "@expo/vector-icons";
 import { colors } from "theme/colors";
 import TrashSVG from "assets/svg/trash.svg";
+// import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
 
 type Props = {
   picture?: string;
-  onChangePicture?: () => void;
-  onDeletePicture?: () => void;
+  errorMessage?: string;
+  onChangePicture: (img: string) => void;
 };
 const PictureSelector = ({
   picture,
-  onDeletePicture: handleDeletePicture,
+  errorMessage,
   onChangePicture: handleChangePicture,
-}: Props) => (
-  <View style={[styles.pictureContainer, !picture && styles.containerBorder]}>
-    {picture ? (
-      <>
-        <TouchableWithoutFeedback
-          onPress={handleChangePicture}
-          style={{ flex: 1 }}
-        >
-          <Image source={{ uri: picture }} style={styles.pictureContent} />
-        </TouchableWithoutFeedback>
-        <TouchableOpacity onPress={handleDeletePicture}>
-          <TrashSVG width={34} height={34} style={styles.deleteIcon} />
-        </TouchableOpacity>
-      </>
-    ) : (
-      <TouchableOpacity
-        style={styles.pictureContent}
-        onPress={handleChangePicture}
-      >
+}: Props) => {
+  const pickImageFromGallery = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      handleChangePicture(result.assets[0].uri);
+    }
+  };
+
+  return (
+    <View style={[styles.pictureContainer, !picture && styles.containerBorder]}>
+      {picture ? (
         <>
-          <Entypo name="camera" size={48} color={colors.mainBlue} />
-          <Text style={styles.subTitle}>Add photo</Text>
+          <Image source={{ uri: picture }} style={styles.pictureContent} />
+          <TouchableOpacity onPress={() => handleChangePicture("")}>
+            <TrashSVG width={34} height={34} style={styles.deleteIcon} />
+          </TouchableOpacity>
+          {errorMessage && (
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          )}
         </>
-      </TouchableOpacity>
-    )}
-  </View>
-);
+      ) : (
+        <TouchableOpacity
+          style={styles.pictureContent}
+          onPress={pickImageFromGallery}
+        >
+          <>
+            <Entypo name="camera" size={48} color={colors.mainBlue} />
+            <Text style={styles.subTitle}>Add photo</Text>
+          </>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};
 
 export default PictureSelector;

@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     marginVertical: 15,
     height: 150,
     width: 150,
-    overflow: "hidden",
   },
   containerBorder: {
     borderRadius: 75,
@@ -30,6 +29,12 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     lineHeight: 24,
+  },
+  errorMessage: {
+    fontSize: 12,
+    fontWeight: "400",
+    lineHeight: 17,
+    color: colors.error,
   },
 });
 

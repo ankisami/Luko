@@ -14,7 +14,7 @@ export const getInventoryItems = async (): Promise<InventoryItem[]> => {
     : initMockedData();
 };
 
-export const setInventoryItems = async (inventoryItems: InventoryItem[]) => {
+export const putInventoryItems = async (inventoryItems: InventoryItem[]) => {
   await AsyncStorage.setItem(
     "@inventoryItemStorage",
     JSON.stringify(inventoryItems)
