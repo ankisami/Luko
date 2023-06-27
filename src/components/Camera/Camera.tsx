@@ -10,6 +10,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Camera, PermissionResponse } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import colors from "theme/colors";
+import Toast from "react-native-toast-message";
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -44,6 +45,11 @@ const CameraScreen = ({ onChangePicture: handleSavePicture, style }: Props) => {
       handleSavePicture(saved.uri);
     } catch (error) {
       console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Impossible to save the picture. Try again",
+      });
     }
   };
 
@@ -71,12 +77,6 @@ export default CameraScreen;
 
 const styles = StyleSheet.create({
   container: {
-    // position: "absolute",
-    // zIndex: 99999,
-    // top: 0,
-    // left: 0,
-    // right: 0,
-    // bottom: 0,
     width: "100%",
     height: "100%",
   },

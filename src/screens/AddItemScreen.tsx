@@ -9,6 +9,7 @@ import { InventoryItem } from "models/Inventory.d";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import uuid from "react-native-uuid";
 import { putInventoryItems } from "api/InventoryApi";
+import Toast from "react-native-toast-message";
 
 export default function AddItemScreen({
   navigation,
@@ -86,10 +87,22 @@ export default function AddItemScreen({
         (item) => item.id !== watch("id")
       );
       updatedInventory.push(data);
-
       await putInventoryItems(updatedInventory);
       navigation.navigate("Inventory");
-    } catch (error) {}
+
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Items updated",
+      });
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something wrong happened. Try again",
+      });
+    }
   };
 
   useEffect(() => {

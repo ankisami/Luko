@@ -45,8 +45,8 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: colors.white,
-    padding: 16,
     borderRadius: 10,
+    paddingVertical: 20,
     height: 200,
     width: 200,
     justifyContent: "space-around",
@@ -54,7 +54,9 @@ export const styles = StyleSheet.create({
   },
 
   modalButton: {
-    height: 50,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   cameraContainer: {
     flex: 1,

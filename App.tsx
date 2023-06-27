@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { fonts } from "./src/theme/fonts";
 import { ActivityIndicator, LogBox } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -23,6 +24,7 @@ export default function App() {
     <SafeAreaProvider>
       <Navigation />
       <StatusBar />
+      <Toast position="top" topOffset={100} />
     </SafeAreaProvider>
   );
 }

@@ -96,7 +96,7 @@ const PictureSelector = ({
               style={styles.modalButton}
             />
             <Button
-              title="Take Picture..."
+              title="Take Picture"
               onPress={openCamera}
               style={styles.modalButton}
             />

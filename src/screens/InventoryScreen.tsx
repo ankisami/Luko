@@ -13,6 +13,7 @@ import { InventoryItem } from "models/Inventory.d";
 import { getInventoryItems } from "api/InventoryApi";
 import { sortItemsByName, filteredItemsByName } from "utils/sortFunction";
 import { MotiView } from "moti";
+import Toast from "react-native-toast-message";
 
 export default function InventoryScreen({
   navigation,
@@ -29,6 +30,11 @@ export default function InventoryScreen({
       setItems(itemsSorted);
     } catch (e) {
       console.error(e);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Impossible to fetch the data. Try again",
+      });
     }
   }, [route, navigation]);
 
@@ -79,7 +85,7 @@ export default function InventoryScreen({
               opacity: 1,
               translateY: 0,
             }}
-            transition={{ delay: 1000 + index * 200 }}
+            transition={{ delay: 100 + index * 200 }}
           >
             <TouchableOpacity
               key={item.id}
