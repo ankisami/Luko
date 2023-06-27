@@ -20,14 +20,15 @@ export const styles = StyleSheet.create({
   },
   image: {
     height: 158,
-    borderRadius: 10,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   textInfos: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
     height: 77,
-    paddingVertical: 20,
+    paddingVertical: 15,
     paddingHorizontal: 16,
   },
   title: {

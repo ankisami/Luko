@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import colors from "theme/colors";
+import fonts from "theme/fonts";
 
 export const styles = StyleSheet.create({
   container: {
@@ -10,6 +11,7 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "400",
     lineHeight: 17,
+    fontFamily: fonts.bold,
   },
   textInputContainer: {
     marginVertical: 10,

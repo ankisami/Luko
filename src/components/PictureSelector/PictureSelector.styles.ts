@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { colors } from "theme/colors";
+import fonts from "theme/fonts";
 
 export const styles = StyleSheet.create({
   pictureContainer: {
@@ -27,7 +28,7 @@ export const styles = StyleSheet.create({
   subTitle: {
     marginTop: 10,
     fontSize: 17,
-    fontWeight: "bold",
+    fontFamily: fonts.bold,
     lineHeight: 24,
   },
   errorMessage: {
