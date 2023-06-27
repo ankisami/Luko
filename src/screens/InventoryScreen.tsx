@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { InventoryPreviewCard, SearchBar, Title } from "components";
 import Colors from "theme/colors";
 import { RootTabScreenProps } from "navigation/types";
 import { InventoryItem } from "models/Inventory.d";
 import { getInventoryItems } from "api/InventoryApi";
 import { sortItemsByName, filteredItemsByName } from "utils/sortFunction";
+import { MotiView } from "moti";
 
 export default function InventoryScreen({
   navigation,
@@ -13,6 +20,8 @@ export default function InventoryScreen({
 }: RootTabScreenProps<"Inventory">) {
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   const getData = useCallback(async () => {
     try {
       const inventoryItemStorage = await getInventoryItems();
@@ -24,6 +33,14 @@ export default function InventoryScreen({
   }, [route, navigation]);
 
   const handleAddButtonPress = () => navigation.navigate("AddItem");
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+
+    getData().then(() => {
+      setRefreshing(false);
+    });
+  };
 
   useEffect(() => {
     // Simulate fetching data from server
@@ -43,24 +60,39 @@ export default function InventoryScreen({
         numColumns={2}
         data={filteredItemsByName(items, searchValue)}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
         ListHeaderComponent={
           <SearchBar
             value={searchValue}
             onChangeText={(value) => setSearchValue(value)}
           />
         }
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            key={item.id}
-            onPress={() =>
-              navigation.navigate({
-                name: "AddItem",
-                params: { item: item },
-              } as any)
-            }
+        renderItem={({ item, index }) => (
+          <MotiView
+            from={{
+              opacity: 0,
+              translateY: 50,
+            }}
+            animate={{
+              opacity: 1,
+              translateY: 0,
+            }}
+            transition={{ delay: 1000 + index * 200 }}
           >
-            <InventoryPreviewCard item={item} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              key={item.id}
+              onPress={() =>
+                navigation.navigate({
+                  name: "AddItem",
+                  params: { item: item },
+                } as any)
+              }
+            >
+              <InventoryPreviewCard item={item} />
+            </TouchableOpacity>
+          </MotiView>
         )}
       />
     </View>
