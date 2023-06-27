@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     width: "100%",
     height: 42,
-    marginTop: 99,
+    marginTop: 35,
     backgroundColor: "transparent",
     flexDirection: "row",
     alignItems: "center",

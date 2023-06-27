@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { Button, FormTextInput, PictureSelector } from "components";
 import { RootTabScreenProps } from "navigation/types";
 import { colors } from "theme/colors";
@@ -121,10 +121,13 @@ export default function AddItemScreen({
       </View>
 
       <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        enableAutomaticScroll={Platform.OS === "ios"}
         contentContainerStyle={styles.formContainer}
         extraScrollHeight={100}
         extraHeight={50}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
         <Controller
           name="photo"
@@ -183,6 +186,7 @@ export default function AddItemScreen({
               textAlignVertical="top"
               containerStyle={{
                 height: 128,
+                paddingTop: 6,
                 alignItems: "flex-start",
               }}
             />
@@ -197,8 +201,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingTop: Platform.OS === "android" ? 40 : 10,
     backgroundColor: colors.background,
-    paddingTop: 10,
   },
   buttonsContainer: {
     width: "100%",
@@ -209,7 +213,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   formContainer: {
-    flex: 1,
     alignItems: "center",
     marginVertical: 40,
   },

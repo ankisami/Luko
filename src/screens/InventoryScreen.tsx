@@ -14,6 +14,7 @@ import { getInventoryItems } from "api/InventoryApi";
 import { sortItemsByName, filteredItemsByName } from "utils/sortFunction";
 import { MotiView } from "moti";
 import Toast from "react-native-toast-message";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function InventoryScreen({
   navigation,
@@ -58,7 +59,7 @@ export default function InventoryScreen({
   }, [navigation, getData]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Title onButtonPress={handleAddButtonPress}>{route.name}</Title>
 
       <FlatList
@@ -101,7 +102,7 @@ export default function InventoryScreen({
           </MotiView>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
