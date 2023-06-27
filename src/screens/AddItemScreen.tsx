@@ -118,6 +118,7 @@ export default function AddItemScreen({
           control={control}
           render={({ field: { value, onChange } }) => (
             <PictureSelector
+              // navigation={() => navigation.navigate("Camera")}
               picture={value}
               onChangePicture={(value) => onChange(value)}
             />
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   formContainer: {
-    justifyContent: "center",
+    flex: 1,
     alignItems: "center",
     marginVertical: 40,
   },

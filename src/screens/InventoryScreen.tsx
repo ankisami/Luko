@@ -12,7 +12,6 @@ export default function InventoryScreen({
   route,
 }: RootTabScreenProps<"Inventory">) {
   const [items, setItems] = useState<InventoryItem[]>([]);
-
   const getData = useCallback(async () => {
     try {
       const inventoryItemStorage = await getInventoryItems();

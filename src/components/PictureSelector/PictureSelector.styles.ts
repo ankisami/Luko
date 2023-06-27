@@ -36,6 +36,29 @@ export const styles = StyleSheet.create({
     lineHeight: 17,
     color: colors.error,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: colors.white,
+    padding: 16,
+    borderRadius: 10,
+    height: 200,
+    width: 200,
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+
+  modalButton: {
+    height: 50,
+  },
+  cameraContainer: {
+    flex: 1,
+    minHeight: 400,
+  },
 });
 
 export default styles;

@@ -6,6 +6,7 @@ export const colors = {
   background: "#F4F3EF",
   white: "#FFFFFF",
   error: "#FF0000",
+  black: "#000000",
 };
 
 export default colors;

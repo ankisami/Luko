@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import { styles } from "./InventoryPreviewCard.styles";
 import { InventoryItem } from "models/Inventory.d";
+import "intl";
+import "intl/locale-data/jsonp/fr";
 
 type Props = {
   item: InventoryItem;

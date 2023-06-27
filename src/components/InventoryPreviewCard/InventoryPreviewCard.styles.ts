@@ -12,15 +12,15 @@ export const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 2,
     },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    elevation: 11,
-    overflow: "hidden",
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   image: {
     height: 158,
+    borderRadius: 10,
   },
   textInfos: {
     flex: 1,
