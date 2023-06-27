@@ -59,7 +59,7 @@ export default function InventoryScreen({
   }, [navigation, getData]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Title onButtonPress={handleAddButtonPress}>{route.name}</Title>
 
       <FlatList
@@ -102,7 +102,7 @@ export default function InventoryScreen({
           </MotiView>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
+    marginTop: 30,
     backgroundColor: Colors.background,
   },
   InventoryPreviewCardList: {

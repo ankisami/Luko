@@ -1,11 +1,19 @@
-import React, { useRef, useState } from "react";
-import { TouchableOpacity, View, Text, Image, Modal } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  Modal,
+  Alert,
+} from "react-native";
 import styles from "./PictureSelector.styles";
 import { Entypo } from "@expo/vector-icons";
 import { colors } from "theme/colors";
 import TrashSVG from "assets/svg/trash.svg";
 import * as ImagePicker from "expo-image-picker";
 import { Button, Camera } from "components";
+import { Camera as ExpoCamera, PermissionResponse } from "expo-camera";
 
 type Props = {
   picture?: string;
@@ -20,7 +28,8 @@ const PictureSelector = ({
 }: Props) => {
   const [showModalOptions, setShowModalOptions] = useState(false);
   const [cameraIsOpen, setCameraIsOpen] = useState(false);
-  const modalRef = useRef();
+  const [cameraPermission, setCameraPermission] = useState(false);
+  const [galleryPermission, setGalleryPermission] = useState(false);
 
   const pickImageFromGallery = async () => {
     setShowModalOptions(false);
@@ -45,9 +54,35 @@ const PictureSelector = ({
     setCameraIsOpen(true);
   };
 
+  const getPermission = async () => {
+    const cameraPermission = await ExpoCamera.requestCameraPermissionsAsync();
+    setCameraPermission(cameraPermission.granted);
+
+    const imagePermission =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    setGalleryPermission(imagePermission.granted);
+
+    console.log("cameraPermission", cameraPermission);
+    console.log("getMediaLibraryPermissionsAsync", imagePermission);
+    if (
+      imagePermission.status !== "granted" &&
+      cameraPermission.status !== "granted"
+    ) {
+      Alert.alert(
+        "Permission needed",
+        "This app needs the camera and gallery permission to work correctly",
+        [{ text: "OK" }]
+      );
+    }
+  };
+
+  useEffect(() => {
+    getPermission();
+  }, []);
+
   return (
     <>
-      {cameraIsOpen ? (
+      {cameraIsOpen && cameraPermission && galleryPermission ? (
         <Camera
           onChangePicture={handleTakePicture}
           style={styles.cameraContainer}
@@ -96,7 +131,7 @@ const PictureSelector = ({
               style={styles.modalButton}
             />
             <Button
-              title="Take Picture"
+              title="Take Picture..."
               onPress={openCamera}
               style={styles.modalButton}
             />

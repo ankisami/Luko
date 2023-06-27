@@ -147,6 +147,7 @@ export default function AddItemScreen({
             <FormTextInput
               label="Name"
               placeholder="Bracelet"
+              placeholderTextColor={colors.lightGrey}
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
@@ -164,6 +165,7 @@ export default function AddItemScreen({
               label="Value"
               type="price"
               placeholder="700"
+              placeholderTextColor={colors.lightGrey}
               onBlur={onBlur}
               onChangeText={(value) => onChange(Number(value))}
               value={value?.toString()}
@@ -179,6 +181,7 @@ export default function AddItemScreen({
             <FormTextInput
               label="Description"
               placeholder="Optional"
+              placeholderTextColor={colors.lightGrey}
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}

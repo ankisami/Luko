@@ -20,6 +20,7 @@ import {
 import { colors } from "../theme/colors";
 import { fonts } from "../theme/fonts";
 import { Title } from "../components/Title";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Navigation() {
   return (
@@ -42,6 +43,7 @@ const FallbackScreen = ({ route }: RootTabScreenProps<"Inventory">) => {
         backgroundColor: colors.background,
         flex: 1,
         paddingHorizontal: 20,
+        marginTop: 30,
       }}
     >
       <Title>{route?.name}</Title>

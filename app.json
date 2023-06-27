@@ -11,11 +11,15 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/d046c88f-d164-4353-86ea-98e9047d31b3"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,19 +29,27 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d046c88f-d164-4353-86ea-98e9047d31b3"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   },
   "plugins": [
     [
-      "expo-image-picker",
-      {
-        "photosPermission": "Allow the app to access your photos."
-      }
-    ],
-    [
       "expo-camera",
       {
         "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+      }
+    ],
+    [
+      "expo-image-picker",
+      {
+        "photosPermission": "Allow the app to access your photos."
       }
     ]
   ]

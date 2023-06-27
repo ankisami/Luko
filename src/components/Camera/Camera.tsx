@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  StyleSheet,
   SafeAreaView,
   TouchableOpacity,
   ViewStyle,
   StyleProp,
+  Alert,
 } from "react-native";
+import styles from "./Camera.styles";
 import { Entypo } from "@expo/vector-icons";
-import { Camera, PermissionResponse } from "expo-camera";
+import { Camera as ExpoCamera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import colors from "theme/colors";
 import Toast from "react-native-toast-message";
@@ -17,27 +18,8 @@ type Props = {
   onChangePicture: (uri: string) => void;
 };
 
-const CameraScreen = ({ onChangePicture: handleSavePicture, style }: Props) => {
-  const [cameraPermission, setCameraPermission] =
-    useState<PermissionResponse>();
-  const [mediaLibraryPermission, setmMediaLibraryPermission] =
-    useState<PermissionResponse>();
-  const cameraRef = useRef<Camera>(null);
-
-  const handlePermissions = async () => {
-    if (!cameraPermission?.granted) {
-      const cameraAllowed = await Camera.requestCameraPermissionsAsync();
-      setCameraPermission(cameraAllowed);
-    }
-    if (!mediaLibraryPermission?.granted) {
-      const mediaLibraryAllowed = await MediaLibrary.requestPermissionsAsync();
-      setmMediaLibraryPermission(mediaLibraryAllowed);
-    }
-  };
-
-  useEffect(() => {
-    handlePermissions();
-  }, []);
+const Camera = ({ onChangePicture: handleSavePicture, style }: Props) => {
+  const cameraRef = useRef<ExpoCamera>(null);
 
   const saveImage = async (img: string) => {
     try {
@@ -65,7 +47,7 @@ const CameraScreen = ({ onChangePicture: handleSavePicture, style }: Props) => {
   };
   return (
     <SafeAreaView style={[styles.container, style]}>
-      <Camera style={styles.camera} ref={cameraRef}></Camera>
+      <ExpoCamera style={styles.camera} ref={cameraRef} />
       <TouchableOpacity style={styles.buttonsContainer} onPress={takePicture}>
         <Entypo name="camera" size={28} color={colors.black} />
       </TouchableOpacity>
@@ -73,21 +55,4 @@ const CameraScreen = ({ onChangePicture: handleSavePicture, style }: Props) => {
   );
 };
 
-export default CameraScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonsContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 20,
-    backgroundColor: "transparent",
-    flexDirection: "row",
-  },
-});
+export default Camera;
