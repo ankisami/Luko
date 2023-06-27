@@ -23,7 +23,6 @@ export default function InventoryScreen({
   }, [route, navigation]);
 
   useEffect(() => {
-    console.log("useEffect");
     // Simulate fetching data from server
     // Replace a API call by a AsyncStorage call for this case study
     const focusHandler = navigation.addListener("focus", () => {

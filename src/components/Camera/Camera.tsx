@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
-  Text,
   SafeAreaView,
   TouchableOpacity,
   ViewStyle,
@@ -10,7 +9,6 @@ import {
 import { Entypo } from "@expo/vector-icons";
 import { Camera, PermissionResponse } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import { RootTabScreenProps } from "navigation/types";
 import colors from "theme/colors";
 
 type Props = {
@@ -53,7 +51,6 @@ const CameraScreen = ({ onChangePicture: handleSavePicture, style }: Props) => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current?.takePictureAsync();
-        console.log("Picture taken", data?.uri);
         if (data?.uri) saveImage(data?.uri);
       } catch (error) {
         console.error(error);

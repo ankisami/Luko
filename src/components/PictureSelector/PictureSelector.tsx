@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import styles from "./PictureSelector.styles";
 import { TouchableOpacity, View, Text, Image, Modal } from "react-native";
+import styles from "./PictureSelector.styles";
 import { Entypo } from "@expo/vector-icons";
 import { colors } from "theme/colors";
 import TrashSVG from "assets/svg/trash.svg";

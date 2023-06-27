@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, FormTextInput, PictureSelector } from "components";
 import { RootTabScreenProps } from "navigation/types";
 import { colors } from "theme/colors";
-import { useForm, Controller, SubmitErrorHandler, set } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { InventoryItem } from "models/Inventory.d";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -118,7 +118,6 @@ export default function AddItemScreen({
           control={control}
           render={({ field: { value, onChange } }) => (
             <PictureSelector
-              // navigation={() => navigation.navigate("Camera")}
               picture={value}
               onChangePicture={(value) => onChange(value)}
             />
