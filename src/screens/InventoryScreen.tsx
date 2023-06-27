@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import { InventoryPreviewCard, Title } from "components";
+import { InventoryPreviewCard, SearchBar, Title } from "components";
 import Colors from "theme/colors";
 import { RootTabScreenProps } from "navigation/types";
 import { InventoryItem } from "models/Inventory.d";
 import { getInventoryItems } from "api/InventoryApi";
-import { sortItemsByName } from "utils/sortFunction";
+import { sortItemsByName, filteredItemsByName } from "utils/sortFunction";
 
 export default function InventoryScreen({
   navigation,
   route,
 }: RootTabScreenProps<"Inventory">) {
   const [items, setItems] = useState<InventoryItem[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
   const getData = useCallback(async () => {
     try {
       const inventoryItemStorage = await getInventoryItems();
@@ -22,6 +23,8 @@ export default function InventoryScreen({
     }
   }, [route, navigation]);
 
+  const handleAddButtonPress = () => navigation.navigate("AddItem");
+
   useEffect(() => {
     // Simulate fetching data from server
     // Replace a API call by a AsyncStorage call for this case study
@@ -31,15 +34,21 @@ export default function InventoryScreen({
     return focusHandler;
   }, [navigation, getData]);
 
-  const handleAddButtonPress = () => navigation.navigate("AddItem");
   return (
     <View style={styles.container}>
       <Title onButtonPress={handleAddButtonPress}>{route.name}</Title>
+
       <FlatList
         contentContainerStyle={styles.InventoryPreviewCardList}
         numColumns={2}
-        data={items}
+        data={filteredItemsByName(items, searchValue)}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <SearchBar
+            value={searchValue}
+            onChangeText={(value) => setSearchValue(value)}
+          />
+        }
         renderItem={({ item }) => (
           <TouchableOpacity
             key={item.id}

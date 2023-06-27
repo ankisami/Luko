@@ -5,3 +5,6 @@ export const sortItemsByName = (
 ): InventoryItem[] => {
   return itemsToSort.sort((a, b) => a.name.localeCompare(b.name));
 };
+
+export const filteredItemsByName = (list: InventoryItem[], value: string) =>
+  list.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
